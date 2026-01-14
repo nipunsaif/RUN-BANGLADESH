@@ -1,0 +1,1773 @@
+\documentclass[12pt, a4paper]{article}
+\usepackage[a4paper, margin=2.5cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{pgfgantt}
+\graphicspath{ {./images/} }
+
+\usepackage[hidelinks]{hyperref}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{positioning, shapes, arrows.meta}
+\usepackage{lastpage}
+
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{1pt}
+\fancyhf{}
+\cfoot{\thepage}
+
+
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+
+\pagestyle{fancyplain}
+\fancyhf{}
+\lhead{ \fancyplain{}{Run Bangladesh} }
+%\chead{ \fancyplain{}{} }
+\rhead{ \fancyplain{}{CSE327 Project Report} }
+\rfoot{\fancyplain{}{page \thepage\ of \pageref{LastPage}}}
+% \fancyfoot[RO, LE] {page \thepage\ of \pageref{LastPage} }
+\thispagestyle{plain}
+
+\title{
+\begin{center}
+     \includegraphics[width=0.20\textwidth]{images/logo.png}
+     
+     {\LARGE North South University}\\
+     {\normalsize DEPARTMENT OF ELECTRICAL AND COMPUTER ENGINEERING}\\
+     {\large \textbf{PROJECT REPORT}}
+
+     \rule{\textwidth}{1pt}
+     {\bfseries\Large RUN BANGLADESH}\\[-1.5ex]
+     \rule{\textwidth}{1pt}
+    
+     { \large \textbf{Course Information}}\\[-1ex]
+     { \large Software Engineering}\\[-1ex]
+     { \large CSE327 (Section 7)}\\[-1ex]
+     { \large Fall 2025}\\[-1ex] \\
+     \vspace{0.5cm}
+     
+     
+     { \large \textbf{Submitted by}}\\[-1ex]
+     {\large \textbf{Team-1}}\\[-1ex]
+     \vspace{0.5cm}
+
+     {\large
+     \begin{tabular}{@{}ll@{}}
+     \textbf{Student Name} & \textbf{Student ID} \\
+     Saif Mohammed & 2121913042 \\
+     Humayra Rahman Nipa & 2121128042 \\
+     Sinthia Ahmed Rachona & 2211916042
+  
+     
+     \end{tabular}
+     \vspace{0.5cm}
+     }
+
+     \vspace{0.5cm}
+
+     { \large \textbf{Submitted to}}\\[-1ex]   
+     {\large Dr. Md. Sazzad Hossain}\\[-1ex]
+     {\large Professor}\\[-1ex]
+     {\large Department of Electrical and Computer Engineering}\\[-1ex]
+     {\large North South University}\\[-1ex]\\\\
+
+     \vspace{0.5cm}
+     
+     { \large\textbf{Submission Date}}\\[-1ex]
+     { \large December 19, 2025}\\[-1ex]
+\end{center}
+}
+
+
+\date{}
+
+
+\begin{document}
+% \pagenumbering{gobble}
+
+\maketitle
+\thispagestyle{empty}
+\newpage
+% \setcounter{page}{1}
+\pagenumbering{arabic}
+
+
+
+
+\section*{\centering Acknowledgement}
+\addcontentsline{toc}{section}{Acknowledgement} % Adds this section to the Table of Contents
+
+First and foremost, I would like to express my sincere gratitude to the Almighty for giving me the strength, patience, and ability to complete this project and report successfully. \\
+
+    I am deeply indebted to my course instructor and supervisor, \textbf{Professor Dr. Md. Sazzad Hossain}, for his invaluable guidance, continuous encouragement, and constructive feedback throughout the duration of the course \textbf{CSE327 (Software Engineering)}. His profound knowledge and teaching methodology have provided me with a solid understanding of software engineering principles, which were essential in the development of the \textit{Run Bangladesh} mobile application.\\
+
+    I would also like to extend my appreciation to the \textbf{Department of Electrical and Computer Engineering} for providing the necessary academic resources and laboratory facilities that facilitated the completion of this project. My sincere thanks go to my fellow team members of \textbf{Team 01}. Our collaborative efforts, brainstorming sessions, and mutual support were instrumental in overcoming the technical challenges we faced during the requirement analysis, design, and development phases.\\
+
+    I must also acknowledge the developers and communities behind the open-source tools and frameworks used in this project, including \texttt{React Native}, \texttt{Node.js}, \texttt{MongoDB}, \texttt{Stripe}, \texttt{Docker}, and \texttt{Jest}. Their documentation and resources were vital in bringing this application to life.\\
+
+    Finally, I would like to thank my family and friends for their unwavering support and patience during the busy hours of this project.\\
+
+\vspace{2cm}
+
+\begin{flushright}
+    \textbf{Saif Mohammed} \\
+    ID: 2121913042\\
+    Team 01 \\
+    Date: \today
+\end{flushright}
+    
+
+\newpage
+\tableofcontents
+\newpage
+
+\listoffigures
+\newpage
+\listoftables
+\newpage
+\pagenumbering{arabic}
+\setcounter{page}{6}
+
+
+% ==========================================
+% SECTION 1: INTRODUCTION
+% ==========================================
+\section{Introduction}
+
+The comprehensive digitization of athletic event management is a critical step towards modernizing the sports infrastructure in Bangladesh. This report details the design and development of \textit{Run Bangladesh}, a full-stack mobile application engineered to facilitate the end-to-end management of marathon events. By transitioning from legacy, manual operations to a cloud-native mobile ecosystem, this project aims to address the scalability, information accessibility, and engagement challenges faced by organizers and participants alike.
+
+\subsection{Background}
+Marathon running has evolved from a niche activity to a mass-participation sport in Bangladesh. However, the operational backbone of these events has not kept pace with this growth. Traditionally, organizers have relied on disjointed methods—physical registration forms, cash-based fee collection, and static text-based descriptions of race locations—to manage thousands of participants. This manual approach is prone to confusion regarding venue locations and lacks the capability to provide interactive visual guidance. The \textit{Run Bangladesh} initiative seeks to bridge this technological gap by deploying a unified mobile platform that leverages the efficiency of the MERN stack (MongoDB, Express, React Native, Node.js) to automate workflows and enhance user experience \cite{srs_doc}.
+
+\subsection{Statement of the problem}
+Despite the enthusiasm for marathons, the existing technical infrastructure presents several critical bottlenecks:
+\begin{itemize}
+    \item \textbf{Data Fragmentation:} Participant data is often scattered across emails, spreadsheets, and third-party forms, leading to redundancy and retrieval difficulties.
+    \item \textbf{Lack of Route Visualization:} Participants often lack clear visual information regarding the exact starting coordinates, ending points, and the total route trajectory, leading to confusion on race day.
+    \item \textbf{Payment Inefficiency:} Manual verification of bank transfers or mobile money payments is time-consuming and error-prone.
+    \item \textbf{Limited Engagement:} Current systems lack social features or multimedia integration, reducing the event to a mere transactional experience rather than a community event.
+\end{itemize}
+
+\subsection{Objectives}
+The primary goal of this project is to engineer a scalable, secure, and user-centric mobile application that serves as a one-stop solution for marathon management.
+
+\subsubsection*{General Objectives}
+\begin{itemize}
+    \item To digitize the entire event lifecycle, from registration to post-race analytics.
+    \item To implement industry-standard software engineering practices, ensuring code maintainability and system reliability \cite{sommerville}.
+\end{itemize}
+
+
+
+\subsubsection*{Specific Objectives}
+\begin{itemize}
+    \item \textbf{Cross-Platform Development:} Utilize \textbf{React Native (Expo)} to deploy a single codebase to both iOS and Android platforms.
+    \item \textbf{Secure Transactions:} Integrate the \textbf{Stripe API} to facilitate instant, secure, and PCI-compliant registration payments.
+    \item \textbf{Event Mapping:} Implement interactive map interfaces using \textbf{Expo Maps} to clearly designate starting lines, finishing points, and race venues.
+    \item \textbf{Architectural Integrity:} Apply \textbf{SOLID Design Principles} and the \textbf{Singleton Pattern} for database connections to ensure a robust backend architecture.
+    \item \textbf{Multimedia Management:} Integrate \textbf{Cloudinary} for the optimized storage and retrieval of event photos and user avatars.
+    \item \textbf{Scalable Deployment:} Containerize the application using \textbf{Docker} and deploy the backend services on the \textbf{Render} cloud platform.
+\end{itemize}
+
+\subsection{Overview of existing system}
+The current "Run Bangladesh" ecosystem relies primarily on a static informational website. Users can view event dates and rules but must perform registration via external Google Forms or physical sign-ups. Payment verification requires organizers to manually cross-check transaction IDs with bank statements. Crucially, the existing system offers no native mobile interface, meaning users cannot access location services to easily find the race starting point or view the route map on their devices.
+
+
+\subsection{Proposed system}
+The proposed solution is a dynamic, full-stack mobile application built on the \textbf{MERN} architecture.
+\begin{itemize}
+    \item \textbf{Frontend:} Developed with \textbf{React Native (Expo)}, offering a native user experience with features like camera access and biometrics.
+    \item \textbf{Backend:} A \textbf{Node.js} and \textbf{Express.js} REST API handles business logic, employing \textbf{JWT} for stateless authentication.
+    \item \textbf{Database:} \textbf{MongoDB} is used for its document-oriented structure, ideal for storing complex event data and route coordinates.
+    \item \textbf{Map Integration:} Utilization of \textbf{React Native Maps} to display static markers for the Start and End points of the marathon, helping users navigate to the correct venue.
+\end{itemize}
+
+\subsection{Benefits or Significance of the project}
+The implementation of this system offers value to all stakeholders:
+\begin{itemize}
+    \item \textbf{For Organizers:} Reduces administrative workload by approximately 40\% through automated payment reconciliation and data management.
+    \item \textbf{For Runners:} Eliminates confusion regarding race logistics by providing clear, map-based guidance for event locations.
+    \item \textbf{For the Community:} Fosters a healthier lifestyle by removing technical barriers to entry for amateur athletes.
+\end{itemize}
+
+\subsection{Scope of the project}
+\begin{itemize}
+    \item \textbf{In-Scope:} User authentication, event registration, payment gateway integration, static map visualization (Start/End points), volunteer management dashboard, and multimedia feeds.
+    \item \textbf{Out-of-Scope:} Real-time GPS tracking of runners (live telemetry), hardware development (RFID chips), and offline-only functionality.
+\end{itemize}
+
+\subsection{Feasibility Assessment}
+A rigorous assessment was conducted to determine the viability of the project across four dimensions.
+
+
+
+
+\subsubsection{Economic Feasibility}
+The project is economically viable as it relies on open-source technologies (MERN Stack) which incur no licensing fees. Operational costs are minimized by using free-tier services for development, including \textbf{MongoDB Atlas} (Database), \textbf{Render} (Hosting), and \textbf{Cloudinary} (Media). The integration of Stripe allows the platform to generate revenue to sustain these costs long-term.
+
+\subsubsection{Technical Feasibility}
+The project is technically feasible given the maturity of the selected stack. \textbf{React Native} provides a robust environment for mobile development, while \textbf{Node.js} excels in handling concurrent I/O operations. The team adheres to the \textbf{Singleton Design Pattern} to manage database instances efficiently and follows \textbf{SOLID principles} to maintain code quality \cite{martin_clean}.
+
+\subsubsection{Operational Feasibility}
+The system is designed with a focus on User Experience (UX). The interface, prototyped in \textbf{Figma}, prioritizes intuitive navigation, ensuring that non-technical organizers and volunteers can adopt the system with minimal training.
+
+\subsubsection{Schedule Feasibility}
+The project utilizes the \textbf{Agile Scrum} methodology. Development is divided into two-week sprints, allowing for iterative delivery and testing. With the use of \textbf{Docker} to standardize development environments, the team is well-positioned to meet the semester deadlines as outlined in the project Gantt chart \cite{pressman}.
+
+% ==========================================
+% SECTION 2: LITERATURE REVIEW
+% ==========================================
+\section{Literature Review}
+
+The development of the \textit{Run Bangladesh} application is situated at the intersection of modern mobile computing, geospatial visualization, and secure enterprise architecture. This section reviews existing literature, architectural paradigms, and industry standards to establish the theoretical and practical foundations for the proposed solution.
+
+\subsection{Detailed Description}
+
+\subsubsection*{Evolution of Event Management Systems}
+Historically, marathon management relied on monolithic, relational database systems (RDBMS) paired with static web interfaces. While sufficient for basic registration, these legacy systems struggle with the high concurrency demands of modern race days and lack native mobile capabilities. Research by \textit{Gao et al.} indicates a paradigm shift towards mobile-cloud collaborative approaches, where heavy computation is offloaded to the cloud while the mobile device acts as a simplified client \cite{gao_mobile}. The \textit{Run Bangladesh} project adopts this modern approach, transitioning from a static web model to a dynamic mobile ecosystem.
+
+
+
+\subsubsection*{Cross-Platform Development Frameworks}
+The choice of development framework significantly impacts maintainability and reach. Traditional native development (Swift/Kotlin) offers performance but requires maintaining two distinct codebases. \textbf{React Native}, specifically within the \textbf{Expo} ecosystem, was selected for this project as it utilizes a "Learn Once, Write Anywhere" methodology. It allows for the rendering of native UI components using JavaScript, ensuring near-native performance while reducing development time by approximately 40\% compared to separate native streams \cite{react_native}.
+
+\subsubsection*{Geospatial Visualization}
+Effective marathon management requires clear communication of race logistics. While some applications employ continuous real-time tracking, this approach often consumes excessive battery power and data bandwidth. For general event logistics, static visualization of key points of interest (POIs) is often sufficient and more efficient. By utilizing \textbf{React Native Maps} within the Expo environment, the application can render native Apple Maps or Google Maps views to display the Start Point, End Point, and Route Path. This allows participants to navigate to the venue using standard navigation tools without the overhead of live telemetry \cite{react_native_maps}.
+
+\subsubsection*{Architectural Design Patterns}
+To ensure the system's longevity and scalability, the software architecture adheres to established engineering principles:
+\begin{itemize}
+    \item \textbf{SOLID Principles:} The backend adheres to the Single Responsibility and Dependency Inversion principles to decouple the business logic from the database layer, facilitating easier testing and future extensions \cite{martin_clean}.
+    \item \textbf{Singleton Pattern:} The application implements the \textbf{Singleton Design Pattern} for the MongoDB connection. This ensures that a single database connection instance is shared across the entire application lifecycle, preventing connection pool exhaustion under heavy load \cite{gof_patterns}.
+\end{itemize}
+
+\subsubsection*{Security and Stateless Authentication}
+In distributed client-server architectures, maintaining session state on the server (stateful authentication) impedes scalability. The industry standard has shifted to stateless authentication using \textbf{JSON Web Tokens (JWT)}. This allows the \textit{Run Bangladesh} API to verify requests without querying the database for session data on every hit \cite{jwt}. Furthermore, financial security is managed by offloading sensitive transaction processing to the \textbf{Stripe API}, ensuring compliance with PCI-DSS standards without the burden of storing credit card information locally \cite{stripe_api}.
+
+\clearpage
+% ==========================================
+% SECTION 3: METHODOLOGY
+% ==========================================
+\section{Methodology}
+
+% This section outlines the systematic approach adopted for the development of the \textit{Run Bangladesh} application. The project follows the **Agile Software Development Life Cycle (SDLC)**, specifically utilizing the Scrum framework. This approach was selected to facilitate iterative development, allowing for continuous feedback integration and rapid adaptation to technical constraints—such as the pivot from real-time tracking to static map visualization—throughout the academic semester \cite{sommerville, scrum_guide}.
+This section outlines the systematic approach adopted for the development of the \textit{Run Bangladesh} application. The project follows the \textbf{Agile Software Development Life Cycle (SDLC)}, specifically utilizing the Scrum framework. This approach was selected to facilitate iterative development, allowing for continuous feedback integration and rapid adaptation to technical constraints—such as the pivot from real-time tracking to static map visualization—throughout the academic semester \cite{sommerville, scrum_guide}.
+
+\subsection{Data Collection}
+Data collection was a critical initial step to ensure the system requirements aligned with the actual needs of marathon organizers and participants. The process was categorized into two distinct phases:
+
+\subsubsection*{Primary Data Collection}
+Primary data was gathered through direct interaction with key stakeholders identified in the Software Requirements Specification (SRS) \cite{srs_doc}.
+\begin{itemize}
+    \item \textbf{Requirement Elicitation:} Functional requirements were derived by analyzing specific "Use Cases" (e.g., UC1 Registration, UC4 Route Viewing).
+    \item \textbf{Stakeholder Analysis:} Interviews were conducted to understand the specific pain points of organizers, such as the confusion regarding race starting points, which led to the requirement for static map visualization.
+\end{itemize}
+
+\subsubsection*{Secondary Data Collection}
+Secondary data involved analyzing existing market solutions and technical documentation.
+\begin{itemize}
+    \item \textbf{Competitor Analysis:} A comparative study of platforms like \textit{Strava} and \textit{Eventbrite} was conducted to understand standard UI patterns for event ticketing and route display.
+    \item \textbf{Technical Research:} Documentation for \textbf{Expo Maps} and \textbf{Stripe API} was reviewed to determine the feasibility of integrating native map views and secure payments within a React Native environment \cite{stripe_api}.
+\end{itemize}
+
+
+
+\subsection{Project Plan}
+The project plan is structured around five key phases of the Agile SDLC. This iterative approach allows for flexibility in handling changes during the development cycle \cite{pressman}.
+
+\begin{enumerate}
+    \item \textbf{Phase 1: Planning and Analysis} \\
+    This phase focused on defining the project scope, creating the SRS, and selecting the \textbf{MERN} technology stack. Feasibility studies regarding the use of \textbf{Expo} for rapid mobile development were concluded here.
+    
+    \item \textbf{Phase 2: System Design} \\
+    The architectural blueprint was created, including the Schema Design for \textbf{MongoDB}. High-fidelity UI prototypes were developed using \textbf{Figma} to visualize the user experience, particularly the event details and map screens, before coding began \cite{figma}.
+    
+    \item \textbf{Phase 3: Implementation (Sprints)} \\
+    The core coding phase was divided into 2-week sprints:
+    \begin{itemize}
+        \item \textit{Sprint 1:} Frontend setup (React Native/Expo) and User Authentication (JWT).
+        \item \textit{Sprint 2:} Backend API development (Node.js/Express) and Database connectivity.
+        \item \textit{Sprint 3:} Integration of \textbf{Expo Maps} for venue location and \textbf{Stripe} for payments.
+    \end{itemize}
+    
+    \item \textbf{Phase 4: Testing} \\
+    Unit testing was performed using the \textbf{Jest} framework to validate individual components \cite{jest}. API endpoints were manually tested using \textbf{Postman} to ensure correct data retrieval from MongoDB.
+    
+    \item \textbf{Phase 5: Deployment and Documentation} \\
+    The final phase involved containerizing the application using \textbf{Docker} for consistent deployment \cite{docker}. The backend was deployed to \textbf{Render}, and the final technical report was compiled.
+\end{enumerate}
+
+
+\subsection{Work Plan (Gantt Chart)}
+The following Gantt chart illustrates the timeline of the project, spanning a duration of approximately 14 weeks.
+
+% Note: Ensure \usepackage{pgfgantt} and \usepackage{graphicx} are in your preamble.
+\begin{center}
+\noindent\resizebox{\textwidth}{!}{% Resize the chart to fit text width
+    \begin{ganttchart}[
+        vgrid={*6{draw=none}, *1{dotted}}, % Grid line only at end of week
+        hgrid,
+        x unit=0.25cm, 
+        y unit chart=0.6cm,
+        time slot format=isodate,
+        time slot unit=day,
+        title/.style={draw=none, fill=none},
+        title label font=\bfseries\small,
+        bar/.style={fill=gray!50},
+        bar height=0.6,
+        group right shift=0,
+        group top shift=0.7,
+        group height=.3,
+        bar label font=\small
+        ]{2025-09-01}{2025-12-07}
+        
+        % Timeline Header
+        \gantttitlecalendar{year, month=name, week} \\
+        
+        % Milestone 1: Planning
+        \ganttgroup{Planning}{2025-09-01}{2025-09-21} \\
+        \ganttbar{Req. Analysis}{2025-09-01}{2025-09-14} \\
+        \ganttbar{SRS Document}{2025-09-15}{2025-09-21} \\
+        
+        % Milestone 2: Design
+        \ganttgroup{Design}{2025-09-22}{2025-10-12} \\
+        \ganttbar{UI/UX (Figma)}{2025-09-22}{2025-10-05} \\
+        \ganttbar{DB Schema}{2025-10-06}{2025-10-12} \\
+        
+        % Milestone 3: Development
+        \ganttgroup{Development}{2025-10-13}{2025-11-23} \\
+        \ganttbar{Frontend (RN)}{2025-10-13}{2025-11-09} \\
+        \ganttbar{Backend (Node)}{2025-10-20}{2025-11-16} \\
+        \ganttbar{Map \& API Int.}{2025-11-10}{2025-11-23} \\
+        
+        % Milestone 4: Testing
+        \ganttgroup{Testing}{2025-11-24}{2025-12-07} \\
+        \ganttbar{Unit Testing}{2025-11-24}{2025-11-30} \\
+        \ganttbar{Final Report}{2025-12-01}{2025-12-07}
+    \end{ganttchart}
+}
+\caption{Work Plan (Gantt Chart)}
+\end{center}
+
+\newpage
+% ==========================================
+% SECTION 4: PROPOSED SYSTEM
+% ==========================================
+\section{Proposed System}
+
+\subsection{Proposed System Overview}
+The \textit{Run Bangladesh} application is a cloud-native mobile solution designed to centralize the management of marathon events. Unlike the legacy system, which relies on disjointed manual processes, the proposed system operates on the \textbf{MERN} stack (MongoDB, Express.js, React Native, Node.js). The application adopts a \textbf{Client-Server architecture} where the frontend is developed using \textbf{React Native (Expo)} to ensure cross-platform compatibility on iOS and Android. The backend, built on \textbf{Node.js}, serves as a RESTful API provider, handling business logic, authentication, and data retrieval. By integrating third-party services like \textbf{Stripe} for payments and \textbf{Expo Maps} for route visualization, the system offers a cohesive, automated experience for both organizers and participants \cite{srs_doc}.
+
+%\subsection{Functional Requirements}
+%The functional requirements define the specific behaviors and functions the system must support. These are categorized by user role:
+%
+%\subsubsection*{Participant (Runner) Features}
+%\begin{itemize}
+%    \item \textbf{Registration & Authentication:} Users shall be able to create accounts and log in using secure credentials (JWT).
+%    \item \textbf{Event Registration:} Users shall be able to browse upcoming marathons and register by paying the entry fee via the \textbf{Stripe} gateway.
+%    \item \textbf{Route Visualization:} Users shall be able to view static map markers indicating the Race Start Point, End Point, and Hydration Stations using the integrated map interface.
+%    \item \textbf{Multimedia Access:} Users shall be able to upload profile avatars and view event galleries stored via \textbf{Cloudinary}.
+%\end{itemize}
+%
+%\subsubsection*{Organizer Features}
+%\begin{itemize}
+%    \item \textbf{Dashboard Management:} Organizers shall be able to create new events, set dates, and define registration fees.
+%    \item \textbf{Volunteer Assignment:} Organizers shall be able to assign tasks to volunteers and monitor their status.
+%    \item \textbf{Data Analytics:} The system shall generate reports on total registrations and revenue collected.
+%\end{itemize}
+
+
+\subsection{Functional Requirements}
+The functional requirements define the specific behaviors and functions the system must support. These are categorized by feature set and user role:
+
+\subsubsection*{Participant Features}
+\begin{itemize}
+    \item \textbf{Registration & Authentication:} Users shall be able to create accounts and log in using secure credentials (JWT-based authentication).
+    \item \textbf{Event Discovery:} Users shall be able to browse a feed of upcoming marathons, filtering by date or location.
+    \item \textbf{Profile Management:} Users shall be able to update personal details and upload profile avatars (stored via \textbf{Cloudinary}).
+\end{itemize}
+
+\subsubsection*{Organizer Features}
+\begin{itemize}
+    \item \textbf{Event Management:} Organizers shall be able to create, edit, and publish new marathon events, including setting registration caps and fees.
+    \item \textbf{Dashboard Analytics:} The system shall provide a dashboard displaying real-time metrics on total registrations, revenue, and participant demographics.
+\end{itemize}
+  
+
+\subsubsection*{Payment Gateway Integration}
+\begin{itemize}
+    \item \textbf{Secure Transactions:} The system shall process registration fees securely using the \textbf{Stripe API}.
+    
+    \item \textbf{Payment Intents:} The system must generate a unique payment intent for every registration attempt to prevent duplicate charges.
+\end{itemize}
+
+
+\subsubsection*{Event Map & Location Services}
+\begin{itemize}
+    \item \textbf{Static Route Visualization:} The app shall display an interactive map marking key locations: Start Point, Finish Line, and Hydration Stations.
+\end{itemize}
+    
+\subsubsection*{Volunteer Coordination}
+\begin{itemize}
+    \item \textbf{Task Assignment:} Organizers shall be able to create tasks (e.g., "Water Station A", "First Aid") and assign them to registered volunteers.
+  
+    \item \textbf{Volunteer Roster:} The system shall maintain a visible list of all active volunteers for a specific event.
+\end{itemize}
+
+\subsection{Non-functional Requirements}
+These requirements define the quality attributes, performance constraints, and operational standards of the system \cite{sommerville}.
+
+\subsubsection{Accessibility}
+The mobile application shall adhere to \textbf{WCAG 2.1 (Level AA)} guidelines. This includes high-contrast modes for visually impaired users and screen-reader compatibility (e.g., VoiceOver/TalkBack) for all navigational elements.
+
+\subsubsection{Usability}
+The user interface, designed in \textbf{Figma}, prioritizes a low learning curve. The system shall ensure that a new user can complete the registration process in fewer than five clicks. Consistency in color schemes and button placement shall be maintained across all screens to reduce cognitive load.
+
+\subsubsection{Documentation}
+Comprehensive documentation shall be provided, including:
+\begin{itemize}
+    \item \textbf{User Manuals:} Step-by-step guides for runners and organizers embedded within the app's "Help" section.
+    \item \textbf{API Documentation:} Technical documentation for backend endpoints (Swagger/Postman collections) to facilitate future development.
+\end{itemize}
+
+\subsubsection{Hardware and Software Considerations}
+\begin{itemize}
+    \item \textbf{Client Hardware:} The app requires a smartphone with GPS capabilities and a camera (for profile uploads).
+    \item \textbf{Client OS:} Compatible with Android 10.0+ and iOS 14.0+.
+    \item \textbf{Server:} The backend requires a Node.js runtime environment and connects to a MongoDB cloud cluster.
+\end{itemize}
+
+\subsubsection{Quality Issues}
+The system focuses on reliability and correctness. \textbf{Automated Unit Testing} (using \textbf{Jest}) covers 80\% of the core business logic to prevent regression bugs. The application utilizes the \textbf{Singleton Design Pattern} for database connections to ensure resource stability \cite{gof_patterns}.
+
+\subsubsection{Security Issues}
+\begin{itemize}
+    \item \textbf{Data Transmission:} All data transmission between client and server is encrypted using \textbf{HTTPS/TLS 1.2+}.
+    \item \textbf{Authentication:} Stateless authentication is implemented using \textbf{JSON Web Tokens (JWT)}; passwords are hashed using \textbf{bcrypt} before storage.
+    \item \textbf{Payments:} No sensitive financial data is stored on the server; all transactions are tokenized and processed via \textbf{Stripe} (PCI-DSS compliant) \cite{stripe_api}.
+\end{itemize}
+
+\subsubsection{User Interface and Human Factors}
+The UI follows standard Material Design (Android) and Human Interface Guidelines (iOS) principles. Buttons are sized appropriately for touch targets (minimum 44x44 points) to accommodate users running or moving.
+
+\subsubsection{Performance Characteristics}
+\begin{itemize}
+    \item \textbf{Latency:} API response time shall be under 200ms for 95\% of requests.
+    \item \textbf{Load Time:} The application initial load time (Time to Interactive) shall not exceed 2 seconds on 4G networks.
+    \item \textbf{Concurrency:} The Node.js backend shall support up to 500 concurrent users during peak registration windows.
+\end{itemize}
+
+\subsubsection{Error Handling and Extreme Conditions}
+The system implements graceful degradation. In the event of network failure, the user receives clear, non-technical error messages (e.g., "No Internet Connection") rather than raw stack traces. Standard HTTP error codes (400, 404, 500) are handled globally to prevent app crashes.
+
+\subsubsection{System Modification}
+The architecture follows \textbf{SOLID Principles}, ensuring modularity. Features are decoupled (e.g., Payment logic is separate from User logic), allowing developers to update specific modules without affecting the entire system. Docker containerization further simplifies the deployment of updates \cite{martin_clean}.
+
+\subsubsection{Feasibility Study}
+\begin{itemize}
+    \item \textbf{Technical:} The use of the MERN stack is feasible as it relies on open-source, well-documented libraries supported by a large community.
+    \item \textbf{Economic:} The project is cost-effective, utilizing free tiers of Render (hosting) and MongoDB Atlas, making it sustainable for non-profit marathon events.
+\end{itemize}
+
+
+% ==========================================
+% SECTION 4.4: SYSTEM MODELS
+% ==========================================
+\subsection{System Models}
+System modeling is a crucial phase in the software engineering process that translates textual requirements into visual representations. For \textit{Run Bangladesh}, Unified Modeling Language (UML) diagrams are employed to depict the structural and behavioral aspects of the system. These models serve as a blueprint for developers and stakeholders, ensuring a shared understanding of the system's architecture and user interactions before the implementation phase begins.
+
+% ==========================================
+% SECTION 4.4.1: USE CASE DIAGRAM
+% ==========================================
+\subsubsection{Use Case Diagram}
+The Use Case Diagram provides a high-level view of the system's functionality by illustrating the interactions between external entities (Actors) and the system's functional units (Use Cases). It defines the scope of the application and identifies the primary goals of each user role.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=1\textwidth]{use_case_diagram.png} 
+    % Uncomment the line above and change the filename to your actual image file
+    \caption{Use Case Diagram for Run Bangladesh Mobile Application}
+    \label{fig:use_case}
+\end{figure}
+
+For the \textit{Run Bangladesh} application, the diagram identifies three primary actors:
+\begin{itemize}
+    \item \textbf{Participant (Runner):} The primary end-user who interacts with the system to browse events, register, pay fees via Stripe, and view the route map.
+    \item \textbf{Organizer (Admin):} The administrative user responsible for creating events, managing volunteer assignments, and viewing financial analytics.
+    \item \textbf{System (Backend/API):} The automated entity that handles background processes such as payment verification, notification dispatch, and leaderboard generation.
+\end{itemize}
+
+Figure \ref{fig:use_case} below visually represents these relationships, demonstrating how the Participant initiates the "Register for Event" use case, which subsequently triggers the "Process Payment" include-case handled by the System.
+
+
+%The diagram highlights the modular nature of the application, where distinct functionalities like "View Map" and "Manage Volunteers" are separated based on actor privileges, adhering to the principle of separation of concerns.
+
+
+% ==========================================
+% SECTION 4.4.2: USE CASE DESCRIPTION
+% ==========================================
+\subsubsection{Use Case Description}
+The following tables provide a detailed textual description of the core use cases identified in the system design. These descriptions outline the preconditions, postconditions, and the specific flow of events required to successfully complete each function.
+
+% --- UC1: User Registration and Login ---
+\begin{table}[h!]
+    \centering
+    \renewcommand{\arraystretch}{1.3}
+    \caption{Use Case Description: User Registration and Login}
+    \label{tab:uc1}
+    \begin{tabular}{|l|p{10cm}|}
+        \hline
+        \textbf{Use Case ID} & UC-01 \\ \hline
+        \textbf{Use Case Name} & User Registration and Login \\ \hline
+        \textbf{Actors} & New Runner, Registered Runner, Authentication Service \\ \hline
+        \textbf{Preconditions} & User has installed the mobile app and has an active internet connection. \\ \hline
+        \textbf{Normal Flow} & 
+        1. User opens the app and selects "Register" or "Login". \newline
+        2. System prompts for email/phone and password. \newline
+        3. System sends an OTP for authentication. \newline
+        4. User enters OTP; system verifies and grants access. \\ \hline
+        \textbf{Postconditions} & User is authenticated and lands on the dashboard. \\ \hline
+        \textbf{Alternative Flows} & 
+        \textbf{A1: Invalid OTP} \newline
+        4a. System prompts retry or resend OTP. \newline
+        \textbf{A2: Forgot Password} \newline
+        2a. User launches password reset flow. \\ \hline
+        \textbf{NFRs} & Secure auth (OTP), TLS in transit, encryption at rest. \\ \hline
+    \end{tabular}
+\end{table}
+
+% --- UC2: Event Browsing and View Details ---
+\begin{table}[h!]
+    \centering
+    \renewcommand{\arraystretch}{1.3}
+    \caption{Use Case Description: Event Browsing and View Details}
+    \label{tab:uc2}
+    \begin{tabular}{|l|p{10cm}|}
+        \hline
+        \textbf{Use Case ID} & UC-02 \\ \hline
+        \textbf{Use Case Name} & Event Browsing and View Details \\ \hline
+        \textbf{Actors} & Participant, Registered Runner \\ \hline
+        \textbf{Preconditions} & User is logged in (or guest); events exist in the system. \\ \hline
+        \textbf{Normal Flow} & 
+        1. User opens "Browse Events". \newline
+        2. System lists upcoming/past events with filters (date, city). \newline
+        3. User selects an event to view details (route map, fees, rules). \newline
+        4. User may proceed to registration. \\ \hline
+        \textbf{Postconditions} & Event details displayed; user can continue to register. \\ \hline
+        \textbf{Alternative Flows} & 
+        \textbf{A1: No Events Found} \newline
+        2a. System shows empty state with "Notify me". \newline
+        \textbf{A2: Network Error} \newline
+        2b. System retries or shows offline cached list. \\ \hline
+        \textbf{NFRs} & Fast list rendering, responsive filtering, offline fallback. \\ \hline
+    \end{tabular}
+\end{table}
+
+% --- UC3: Event Registration and Payment ---
+\begin{table}[h!]
+    \centering
+    \renewcommand{\arraystretch}{1.3}
+    \caption{Use Case Description: Event Registration and Payment}
+    \label{tab:uc3}
+    \begin{tabular}{|l|p{10cm}|}
+        \hline
+        \textbf{Use Case ID} & UC-03 \\ \hline
+        \textbf{Use Case Name} & Event Registration and Payment \\ \hline
+        \textbf{Actors} & Participant, Payment Gateway (Stripe) \\ \hline
+        \textbf{Preconditions} & User is authenticated; event is open; payment method available. \\ \hline
+        \textbf{Normal Flow} & 
+        1. User selects event category (e.g., 5K, 10K). \newline
+        2. System collects participant info (age, emergency contact). \newline
+        3. User proceeds to Checkout. \newline
+        4. Stripe processes payment securely. \newline
+        5. System confirms registration and issues QR bib/ID. \\ \hline
+        \textbf{Postconditions} & Registration recorded; receipt available in "My Events". \\ \hline
+        \textbf{Alternative Flows} & 
+        \textbf{A1: Payment Failure} \newline
+        4a. Show reason; allow retry/change method. \newline
+        \textbf{A2: Category Full} \newline
+        1a. Offer waitlist option or another category. \\ \hline
+        \textbf{NFRs} & PCI-compliant Stripe integration, reliability at peak load. \\ \hline
+    \end{tabular}
+\end{table}
+
+\newpage % Force page break for better layout
+
+% --- UC4: Static Location Map----
+\begin{table}[h!]
+    \centering
+    \renewcommand{\arraystretch}{1.2}
+    \caption{Use Case Description: Static Location Map}
+    \label{tab:uc4}
+    \begin{tabular}{|l|p{10cm}|}
+        \hline
+        \textbf{Use Case ID} & UC-04 \\ \hline
+        \textbf{Name} & Marathon Start \& End Verification \\ \hline
+        \textbf{Actors} & Participant, GPS Service \\ \hline
+        \textbf{Preconditions} & GPS enabled; Start/End coordinates defined. \\ \hline
+        \textbf{Normal Flow} & 
+        1. App validates GPS location at Start Point; Timer starts. \newline
+        2. Participant completes course. \newline
+        3. App validates GPS location at End Point; Timer stops. \newline
+        4. Total duration logged and uploaded. \\ \hline
+        \textbf{Postconditions} & Race completion recorded. \\ \hline
+        \textbf{Alt. Flows} & 
+        \textbf{A1: Location Invalid:} User not inside geofence; action blocked. \newline
+        \textbf{A2: Weak Signal:} User prompted to improve GPS visibility. \\ \hline
+        \textbf{NFRs} & Geofence accuracy ($<10$m), Anti-spoofing. \\ \hline
+    \end{tabular}
+\end{table}
+
+% --- UC5: Event and Dashboard Management ---
+\begin{table}[h!]
+    \centering
+    \renewcommand{\arraystretch}{1.3}
+    \caption{Use Case Description: Event and Dashboard Management}
+    \label{tab:uc5}
+    \begin{tabular}{|l|p{10cm}|}
+        \hline
+        \textbf{Use Case ID} & UC-05 \\ \hline
+        \textbf{Use Case Name} & Event Management \\ \hline
+        \textbf{Actors} & Organizer, Admin \\ \hline
+        \textbf{Preconditions} & Organizer authenticated with proper role. \\ \hline
+        \textbf{Normal Flow} & 
+        1. Organizer opens Dashboard. \newline
+        2. Creates/updates event (title, date, route, fees). \newline
+        3. Assigns volunteers; reviews registrations. \newline
+        4. Publishes updates; monitors analytics. \\ \hline
+        \textbf{Postconditions} & Event configuration saved and reflected to users. \\ \hline
+        \textbf{Alternative Flows} & 
+        \textbf{A1: Invalid Input} \newline
+        2a. System shows field-level validation errors. \\ \hline
+        \textbf{NFRs} & RBAC, audit logging, strong consistency for writes. \\ \hline
+    \end{tabular}
+\end{table}
+
+% --- UC6: Volunteer Coordination ---
+\begin{table}[h!]
+    \centering
+    \renewcommand{\arraystretch}{1.3}
+    \caption{Use Case Description: Volunteer Coordination}
+    \label{tab:uc6}
+    \begin{tabular}{|l|p{10cm}|}
+        \hline
+        \textbf{Use Case ID} & UC-06 \\ \hline
+        \textbf{Use Case Name} & Volunteer Check-In \\ \hline
+        \textbf{Actors} & Volunteer, Organizer \\ \hline
+        \textbf{Preconditions} & Volunteer assigned to an event/shift; authenticated. \\ \hline
+        \textbf{Normal Flow} & 
+        1. Volunteer opens "My Assignments". \newline
+        2. Reviews duty location/time and instructions. \newline
+        3. Taps "Check In"; status visible to Organizer. \\ \hline
+        \textbf{Postconditions} & Attendance recorded; check-in timestamp stored. \\ \hline
+        \textbf{Alternative Flows} & 
+        \textbf{A1: No Assignment} \newline
+        1a. Contact Organizer. \newline
+        \textbf{A2: Late Arrival} \newline
+        3a. Flagged for dashboard alert. \\ \hline
+        \textbf{NFRs} & Low-friction UI, reliable sync, role-based permissions. \\ \hline
+    \end{tabular}
+\end{table}
+
+
+\clearpage
+
+\subsubsection{Class Diagram}
+
+The Class Diagram illustrates the static structure of the Run Bangladesh system, defining the core classes, their attributes, and the relationships between them. As shown in Figure \ref{fig:class_diagram}, the system is built around a central \texttt{User} class, which serves as a parent class for specific roles: \texttt{Participant} and \texttt{Organizer}.
+
+Key architectural decisions depicted include:
+\begin{itemize}
+    \item \textbf{Inheritance:} Both Participants and Organizers inherit common credentials (ID, email, password hash) from the \texttt{User} class.
+    \item \textbf{Associations:} The \texttt{Event} class has a one-to-many relationship with \texttt{Registration}, allowing multiple participants to register for a single marathon.
+    \item \textbf{Payment Integration:} The \texttt{Payment} class is linked to \texttt{Registration}, encapsulating transaction details (Stripe ID, status, amount) to ensure financial accountability.
+\end{itemize}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=1\textwidth]{class-diagram.png} 
+    % Uncomment the line above and change the filename to your actual image file
+    \caption{UML Class Diagram: Run Bangladesh}
+    \label{fig:class_diagram}
+\end{figure}
+
+%\clearpage
+%\subsubsection{Sequence diagram}
+%\begin{figure}[h!]
+%    \centering
+%    \includegraphics[width=0.9\textwidth]{seq-1.png} 
+%    % Uncomment the line above and change the filename to your actual image file
+%    \caption{Sequence Diagram: Participant Event Registration \& Payment}
+%    \label{fig:use_case}
+%\end{figure}
+%
+%\begin{figure}[h!]
+%    \centering
+%    \includegraphics[width=0.9\textwidth]{seq2.png} 
+%    % Uncomment the line above and change the filename to your actual image file
+%    \caption{Sequence Diagram: Organizer Creates New Event}
+%    \label{fig:use_case}
+%\end{figure}
+
+%\clearpage
+%
+%\subsubsection{State chart diagram}
+%\begin{figure}[h!]
+%    \centering
+%    \includegraphics[width=0.9\textwidth]{SC-1.jpeg} 
+%    % Uncomment the line above and change the filename to your actual image file
+%    \caption{State Chart Diagram: Participant Event Registration \& Payment}
+%    \label{fig:use_case}
+%\end{figure}
+%
+%\subsubsection{State chart diagram}
+%\begin{figure}[h!]
+%    \centering
+%    \includegraphics[width=0.9\textwidth]{SC-2.jpeg} 
+%    % Uncomment the line above and change the filename to your actual image file
+%    \caption{State Chart Diagram: Organizer Creates New Event}
+%    \label{fig:use_case}
+%\end{figure}
+%
+%
+%\clearpage
+%\subsubsection{Activity diagram}
+%\begin{figure}[h!]
+%    \centering
+%    \includegraphics[width=0.9\textwidth]{AD-1.jpeg} 
+%    % Uncomment the line above and change the filename to your actual image file
+%    \caption{Activity Diagram: Organizer Creates New Event}
+%    \label{fig:use_case}
+%\end{figure}
+%
+%
+%\begin{figure}[h!]
+%    \centering
+%    \includegraphics[width=0.9\textwidth]{AD-2.jpeg} 
+%    % Uncomment the line above and change the filename to your actual image file
+%    \caption{Activity Diagram: Participant Event Registration \& Payment}
+%    \label{fig:use_case}
+%\end{figure}
+
+
+\subsubsection{Sequence Diagrams}
+Sequence diagrams model the dynamic interactions between system objects over time.
+
+\begin{itemize}
+	\item \textbf{Participant Event Registration \& Payment:} Figure \ref{fig:seq_participant} illustrates the sequence of operations when a user registers for a marathon. The \textit{Participant} initiates the request via the frontend. The \textit{System} first validates slot availability with the Database. Upon confirmation, a payment intent is created via the \textit{Stripe Gateway}. The registration is finalized and stored only after a successful transaction callback is received.
+
+\begin{figure}[h!]
+    \centering
+     \includegraphics[width=0.9\textwidth]{seq-1.png} 
+    % Uncomment the line above and change the filename to your actual image file
+    \caption{Sequence Diagram: Participant Event Registration \& Payment}
+    
+    \label{fig:seq_participant}
+\end{figure}
+
+\item \textbf{Organizer Creates New Event:} 
+Figure \ref{fig:seq_organizer} details the administrative flow for publishing a new race. The \textit{Organizer} submits event details (name, location, date). The \textit{Backend Controller} validates these inputs (e.g., ensuring the date is in the future) and saves the event to the \textit{MongoDB Database}. Finally, a confirmation response is sent back to the client.
+
+\begin{figure}[h!]
+    \centering
+     \includegraphics[width=0.9\textwidth]{seq2.png} 
+    % Uncomment the line above and change the filename to your actual image file
+    \caption{Sequence Diagram: Organizer Creates New Event}
+    \label{fig:seq_organizer}
+\end{figure}
+
+
+\end{itemize}
+
+
+
+
+
+\subsubsection{State Chart Diagrams}
+State chart diagrams describe the lifecycle of specific objects within the system as they transition between states in response to events.
+
+\begin{itemize}
+	\item \textbf{Registration Lifecycle:} Figure \ref{fig:state_registration} depicts the states of a registration object. It begins as \textit{Pending} during the payment phase. If payment fails or times out, it transitions to \textit{Cancelled}. A successful transaction moves it to \textit{Confirmed}. Once the race is verified as run, the state updates to \textit{Completed}.
+
+\begin{figure}[h!]
+    \centering
+     \includegraphics[width=0.9\textwidth]{SC-1.jpeg} 
+    % Uncomment the line above and change the filename to your actual image file
+    \caption{State Chart Diagram: Participant Event Registration \& Payment}
+    \label{fig:state_registration}
+\end{figure}
+
+\item \textbf{Event Lifecycle:} Figure \ref{fig:state_event} tracks the status of a marathon event. Initially created as a \textit{Draft}, it transitions to \textit{Open} when published by the organizer. It becomes \textit{Closed} when the max capacity is reached or the registration deadline passes. Finally, after the event concludes, it is \textit{Archived}.
+
+\begin{figure}[h!]
+    \centering
+     \includegraphics[width=0.9\textwidth]{SC-2.jpeg} 
+    % Uncomment the line above and change the filename to your actual image file
+    \caption{State Chart Diagram: Organizer Creates New Event}
+    \label{fig:state_event}
+\end{figure}
+
+\subsubsection{Activity Diagrams}
+Activity diagrams map the workflow of business processes, highlighting decision nodes and parallel activities.
+
+
+\begin{itemize}
+	\item \textbf{Organizer Workflow: Creating an Event:}
+Figure \ref{fig:activity_organizer} shows the decision logic for creating an event. The system checks if all required fields are valid and if the selected location is recognized. If validation fails, the flow loops back to the input form. If successful, the system simultaneously saves the event data and establishes the geofencing parameters.
+
+\begin{figure}[h!]
+    \centering
+     \includegraphics[width=0.9\textwidth]{AD-2.jpeg} 
+    % Uncomment the line above and change the filename to your actual image file
+    \caption{Activity Diagram: Organizer Creates New Event}
+    \label{fig:activity_organizer}
+\end{figure}
+
+\item \textbf{Participant Workflow: Registration:} Figure \ref{fig:activity_participant} outlines the user journey. The flow begins with selecting an event. A decision node checks for vacancy ("Is Full?"). If slots are available, the user proceeds to payment. A subsequent check verifies the transaction status; success triggers the generation of a QR code, while failure prompts a retry.
+
+\begin{figure}[h!]
+    \centering
+     \includegraphics[width=0.9\textwidth]{AD-1.jpeg} 
+    % Uncomment the line above and change the filename to your actual image file
+    \caption{Activity Diagram: Participant Event Registration \& Payment}
+    \label{fig:activity_participant}
+\end{figure}
+
+
+
+\end{itemize}
+
+\clearpage
+% ==========================================
+% SECTION 5: DESIGN CONTENTS
+% ==========================================
+\newpage
+\section{Design Contents}
+
+\subsection{Introduction}
+The design phase serves as the bridge between the requirement analysis and the final system implementation \cite{pressman}. This section details the architectural decisions, structural decomposition, and interface strategies adopted for the Run Bangladesh application. The primary objective of this design is to create a blueprint that ensures the system is scalable, maintainable, and robust enough to handle high-concurrency traffic during marathon registration periods. The design follows a Client-Server architecture optimized for mobile environments, distinctively separating the Mobile Client (Front-end) from the Backend Server \cite{gao_mobile}. In this framework, the mobile application acts as the client, responsible for the user interface and presentation logic, while the server handles the core business logic, data persistence, and API processing, ensuring secure and efficient communication over the network.
+
+\subsection{Proposed System Architecture}
+The system utilizes a \textbf{Three-Tier Client-Server Architecture} powered by the MERN stack \cite{sommerville}. This separation of concerns ensures that the frontend and backend can be developed, tested, and scaled independently \cite{martin_clean}.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=1\textwidth]{high-level.jpeg} 
+    % Uncomment the line above and change the filename to your actual image file
+    \caption{Proposed System Architecture for Run Bangladesh}
+    \label{fig:use_case}
+\end{figure}
+
+\begin{enumerate}
+    \item \textbf{Presentation Layer (Client):} Built with \textbf{React Native (Expo)} \cite{react_native}, this layer runs on the user's mobile device (iOS/Android). It handles user interactions, renders the UI, and communicates with the backend via RESTful API calls over HTTPS. It manages local state but relies on the server for persistent data.
+    
+    \item \textbf{Application Layer (Server):} Hosted on \textbf{Render}, this layer consists of a \textbf{Node.js} runtime with the \textbf{Express.js} framework. It acts as the central controller, processing incoming API requests, executing business logic (e.g., verifying registration eligibility), and enforcing security policies such as \textbf{JWT authentication} \cite{jwt}.
+    
+    \item \textbf{Data Layer (Database):} The system uses \textbf{MongoDB Atlas}, a cloud-hosted NoSQL database. It stores all persistent data, including user profiles, event details, and payment transaction logs, in a flexible JSON-like document format.
+\end{enumerate}
+
+
+
+\subsection{Subsystem Decomposition}
+To manage complexity, the system is decomposed into distinct, loosely coupled modules. Each module encapsulates a specific set of functionalities and interacts with others through well-defined interfaces.
+
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.9\textwidth]{module.jpeg} 
+    % Uncomment the line above and change the filename to your actual image file
+    \caption{Subsystem Decomposition of Run Bangladesh Application}
+    \label{fig:use_case}
+\end{figure}
+
+
+
+\subsubsection{List of Modules}
+The application is divided into five core modules:
+
+\begin{itemize}
+    \item \textbf{User Management Module:} Handles user sign-up, login (via JWT), password recovery, and profile management. It includes the logic for role-based access control (Admin vs. Runner).
+    
+    \item \textbf{Event Management Module:} Allows organizers to create, update, and delete marathon events. For runners, this module handles event browsing, filtering, and retrieving detailed route maps.
+    
+    \item \textbf{Payment Processing Module:} A secure subsystem that interfaces with the \textbf{Stripe API}. It manages payment intent creation, webhook handling for transaction confirmation, and receipt generation.
+    
+    \item \textbf{Volunteer Management Module:} Facilitates the assignment of volunteers to specific checkpoints. It provides a specialized view for volunteers to check in and view their duties.
+    
+    \item \textbf{Notification Service:} An asynchronous module responsible for dispatching push notifications regarding race updates, payment confirmations, or emergency alerts.
+\end{itemize}
+
+\subsection{System Layout}
+The system layout describes the deployment topology and network interactions. The \textit{Run Bangladesh} application is entirely cloud-native:
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.9\textwidth]{layout.jpeg} 
+    % Uncomment the line above and change the filename to your actual image file
+    \caption{System Layout of Run Bangladesh Application}
+    \label{fig:system_layout}
+\end{figure}
+
+
+\begin{itemize}
+    \item \textbf{Client Side:} The mobile application acts as a "Fat Client," performing initial data validation and rendering maps using the device's native GPS hardware.
+    \item \textbf{API Gateway:} All traffic is routed through a central API endpoint (e.g., \texttt{api.runbangladesh.com}). Nginx is used as a reverse proxy within the Render environment to handle load balancing.
+    \item \textbf{External Integrations:} 
+    \begin{itemize}
+        \item \textbf{Stripe:} For payment processing (PCI-DSS compliant).
+        \item \textbf{Cloudinary:} For offloading heavy media storage (user avatars, race photos) to a Content Delivery Network (CDN).
+        \item \textbf{Google/Apple Maps:} Accessed via the Expo Maps SDK for rendering route overlays.
+    \end{itemize}
+\end{itemize}
+
+%\subsection{User Interface Design}
+%The User Interface (UI) is designed with a "Mobile-First" philosophy, prioritizing touch interactions and readability in outdoor environments (e.g., bright sunlight).
+%
+%
+%\begin{figure}[H]
+%\centering
+%
+%% --- Image 1 ---
+%\begin{subfigure}{\textwidth} % Container takes ~1/3 of the page
+%    \centering
+%    % Image fills the specific container width, not the whole page
+%    \includegraphics[width=\linewidth, height=8cm, keepaspectratio]{home.png}
+%    % \caption{Home Screen}
+%    \label{fig:uc1}
+%\end{subfigure}
+%\hfill % Adds flexible space between images
+%% --- Image 2 ---
+%\begin{subfigure}{\textwidth}
+%    \centering
+%    \includegraphics[width=\linewidth, height=8cm, keepaspectratio]{admin_login.png}
+%    % \caption{Login As Admin}
+%    \label{fig:uc2}
+%\end{subfigure}
+%\hfill
+%% --- Image 3 ---
+%\begin{subfigure}{\textwidth}
+%    \centering
+%    \includegraphics[width=\linewidth, height=8cm, keepaspectratio]{feed.png}
+%    % \caption{Event Feed}
+%    \label{fig:uc3}
+%\end{subfigure}
+%
+% \caption{Admin UI: Home Page, Login as Admin, Event Feed}
+%\label{fig:ui_snapshots_row1}
+%\end{figure}
+%
+%\begin{figure}[H]
+%\centering
+%% ======== Second Row: UC5–UC8 ========
+%\begin{subfigure}
+%\includegraphics[width=\textwidth,height=8cm,keepaspectratio]{create.png}
+%    % \caption{UC5 — Organizer Dashboard Management}
+%    \label{fig:uc5}
+%\end{subfigure}
+%\hfill
+%\begin{subfigure}
+%    \includegraphics[width=\textwidth,height=8cm,keepaspectratio]{volunteers.png}
+%    % \caption{UC6 — Volunteer Check-In}
+%    \label{fig:uc6}
+%\end{subfigure}
+%\hfill
+%\begin{subfigure}
+%    \includegraphics[width=\textwidth,height=8cm,keepaspectratio]{admin profile.png}
+%    % \caption{UC7 — Leaderboard and Results}
+%    \label{fig:uc7}
+%\end{subfigure}
+%\hfill
+%
+% \caption{Admin UI: Create Event, Add Volunteers, Profile}
+%\label{fig:ui_snapshots}
+%\end{figure}
+%
+%
+%
+%\begin{figure}[H]
+%\centering
+%% --- Image 1 ---
+%\begin{subfigure}{\textwidth} % Container takes ~1/3 of the page
+%    \centering
+%    % Image fills the specific container width, not the whole page
+%    \includegraphics[width=\linewidth, height=8cm, keepaspectratio]{signup.png}
+%    % \caption{Home Screen}
+%    \label{fig:uc1}
+%\end{subfigure}
+%\hfill % Adds flexible space between images
+%% --- Image 2 ---
+%\begin{subfigure}{\textwidth}
+%    \centering
+%    \includegraphics[width=\linewidth, height=8cm, keepaspectratio]{user_login.png}
+%    % \caption{Login As Admin}
+%    \label{fig:uc2}
+%\end{subfigure}
+%\hfill
+%% --- Image 3 ---
+%\begin{subfigure}{\textwidth}
+%    \centering
+%    \includegraphics[width=\linewidth, height=8cm, keepaspectratio]{user_feed.png}
+%    % \caption{Event Feed}
+%    \label{fig:uc3}
+%\end{subfigure}
+%
+% \caption{Participants UI: SignUp Page, Login Page, Event Feed}
+%\label{fig:ui_snapshots_row1}
+%\end{figure}
+%
+%
+%\begin{figure}[H]
+%\centering
+%% --- Image 1 ---
+%\begin{subfigure}{\textwidth} % Container takes ~1/3 of the page
+%    \centering
+%    % Image fills the specific container width, not the whole page
+%    \includegraphics[width=\linewidth, height=8cm, keepaspectratio]{event_registration.png}
+%    % \caption{Home Screen}
+%    \label{fig:uc1}
+%\end{subfigure}
+%\hfill % Adds flexible space between images
+%% --- Image 2 ---
+%\begin{subfigure}{\textwidth}
+%    \centering
+%    \includegraphics[width=\linewidth, height=8cm, keepaspectratio]{map.png}
+%    % \caption{Login As Admin}
+%    \label{fig:uc2}
+%\end{subfigure}
+%\hfill
+%% --- Image 3 ---
+%\begin{subfigure}{\textwidth}
+%    \centering
+%    \includegraphics[width=\linewidth, height=8cm, keepaspectratio]{payment.png}
+%    % \caption{Event Feed}
+%    \label{fig:uc3}
+%\end{subfigure}
+%
+% \caption{Participants UI: Registration, Map Location, Payment Gateway}
+%\label{fig:ui_snapshots_row1}
+%\end{figure}
+%
+%
+%
+%
+%
+%\subsubsection{Design Principles}
+%\begin{itemize}
+%    \item \textbf{Consistency:} The app uses a unified color palette (Primary: Marathon Blue, Secondary: Energy Orange) and typography (Roboto/San Francisco) across all screens.
+%    \item \textbf{Feedback:} Every interaction provides immediate visual feedback (e.g., loading spinners, button press states, toast notifications for success/error).
+%    \item \textbf{Simplicity:} The registration flow is broken into a multi-step wizard to prevent form fatigue, ensuring only relevant information is requested at each stage.
+%\end{itemize}
+%
+%\subsubsection{Key Interface Mockups}
+%
+%\textbf{1. The Dashboard (Home Screen):} \\
+%Displays a personalized greeting, a "Next Race" countdown timer for registered users, and a horizontal scroll list of featured upcoming marathons.
+%
+%\textbf{2. Event Details \& Map View:} \\
+%Provides a rich view of the event. The upper half displays the race banner and key stats (Date, Time, Fee). The lower half features an interactive map where users can pan and zoom to inspect the starting line and hydration points.
+%
+%\textbf{3. QR Code Bib (Digital ID):} \\
+%A unique screen generated post-registration containing a QR code. This serves as the runner's digital pass for race-kit collection, eliminating the need for printed receipts.
+%
+%
+
+
+\subsection{User Interface Design}
+The User Interface (UI) is designed with a "Mobile-First" philosophy, prioritizing touch interactions and readability in outdoor environments. The application features distinct workflows for Administrators (Organizers) and Participants to ensure role-specific usability.
+
+% --- FIGURE 1: Admin Row 1 ---
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{\textwidth}
+        \centering
+        \includegraphics[width=\linewidth, height=10cm, keepaspectratio]{home.png}
+%        \caption{Home Screen}
+        \label{fig:admin_home}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{\textwidth}
+        \centering
+        \includegraphics[width=\linewidth, height=10cm, keepaspectratio]{admin_login.png}
+%        \caption{Admin Login}
+        \label{fig:admin_login}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{\textwidth}
+        \centering
+        \includegraphics[width=\linewidth, height=10cm, keepaspectratio]{feed.png}
+%        \caption{Event Feed}
+        \label{fig:admin_feed}
+    \end{subfigure}
+    \caption{Admin UI: Landing, Authentication, and Management Feed}
+    \label{fig:ui_admin_row1}
+\end{figure}
+
+% --- FIGURE 2: Admin Row 2 ---
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{\textwidth}
+        \centering
+        \includegraphics[width=\linewidth, height=10cm, keepaspectratio]{create.png}
+%        \caption{Create Event}
+        \label{fig:admin_create}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{\textwidth}
+        \centering
+        \includegraphics[width=\linewidth, height=10cm, keepaspectratio]{volunteers.png}
+%        \caption{Add Volunteers}
+        \label{fig:admin_volunteers}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{\textwidth}
+        \centering
+        \includegraphics[width=\linewidth, height=10cm, keepaspectratio]{admin profile.png}
+%        \caption{Admin Profile}
+        \label{fig:admin_profile}
+    \end{subfigure}
+    \caption{Admin UI: Event Creation, Volunteer Management, and Profile}
+    \label{fig:ui_admin_row2}
+\end{figure}
+
+% --- FIGURE 3: Participant Row 1 ---
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{\textwidth}
+        \centering
+        \includegraphics[width=\linewidth, height=10cm, keepaspectratio]{signup.png}
+%        \caption{Sign Up}
+        \label{fig:user_signup}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{\textwidth}
+        \centering
+        \includegraphics[width=\linewidth, height=10cm, keepaspectratio]{user_login.png}
+%        \caption{Login}
+        \label{fig:user_login}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{\textwidth}
+        \centering
+        \includegraphics[width=\linewidth, height=10cm, keepaspectratio]{user_feed.png}
+%        \caption{User Feed}
+        \label{fig:user_feed}
+    \end{subfigure}
+    \caption{Participant UI: SignUp, Login, and Event Discovery}
+    \label{fig:ui_user_row1}
+\end{figure}
+
+% --- FIGURE 4: Participant Row 2 ---
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{\textwidth}
+        \centering
+        \includegraphics[width=\linewidth, height=10cm, keepaspectratio]{event_registration.png}
+%        \caption{Registration}
+        \label{fig:user_reg}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{\textwidth}
+        \centering
+        \includegraphics[width=\linewidth, height=10cm, keepaspectratio]{map.png}
+%        \caption{Map View}
+        \label{fig:user_map}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{\textwidth}
+        \centering
+        \includegraphics[width=\linewidth, height=10cm, keepaspectratio]{payment.png}
+%        \caption{Payment}
+        \label{fig:user_pay}
+    \end{subfigure}
+    \caption{Participant UI: Registration, Location Verification, and Payment}
+    \label{fig:ui_user_row2}
+\end{figure}
+
+\subsubsection*{Design Principles}
+\begin{itemize}
+    \item \textbf{Role-Based Navigation:} The application dynamically renders different navigation stacks for Admins and Participants, ensuring security and reducing interface clutter.
+    \item \textbf{Visual Consistency:} A unified color palette (Primary: Marathon Blue, Secondary: Energy Orange) and consistent typography (Roboto) are used across all screens to maintain brand identity.
+    \item \textbf{Feedback & Validation:} Interactions such as form submissions (e.g., creating an event or registering) provide immediate visual cues, while input fields include real-time validation to prevent errors.
+\end{itemize}
+
+\subsubsection*{Key Interface Mockups}
+
+\textbf{1. Administrator Workflow (Figures \ref{fig:ui_admin_row1} \& \ref{fig:ui_admin_row2})} \\
+The Admin interface focuses on event management and logistics:
+\begin{itemize}
+    \item \textbf{Authentication:} A secure login screen (\textit{Login As Admin}) protects administrative features.
+    \item \textbf{Event Management:} The \textit{Create Event} screen allows organizers to input race details, while the \textit{Event Feed} provides an overview of all active listings.
+    \item \textbf{Logistics:} The \textit{Volunteer Management} screen enables the allocation of support staff, and the \textit{Profile} screen manages organizer credentials.
+\end{itemize}
+
+\textbf{2. Participant Workflow (Figures \ref{fig:ui_user_row1} \& \ref{fig:ui_user_row2})} \\
+The Participant interface is optimized for discovery and speed:
+\begin{itemize}
+    \item \textbf{Onboarding:} New users can create accounts via the \textit{Sign Up} screen or access existing accounts via \textit{Login}.
+    \item \textbf{Discovery \& Registration:} The \textit{User Feed} displays upcoming marathons. Clicking an event opens the \textit{Registration} form, where specific runner details are collected.
+    \item \textbf{Location \& Payment:} The \textit{Map View} allows users to verify the starting location relative to their position (fulfilling the Geofencing requirement), followed by a secure \textit{Payment Gateway} screen to finalize the booking.
+\end{itemize}
+
+
+%% ==========================================
+%% SECTION 6: IMPLEMENTATION
+%% ==========================================
+%\section{Implementation}
+%
+%\subsection{Introduction}
+%The implementation phase involves transforming the system design and architectural specifications into a functional software product. This section outlines the core algorithms developed, the coding standards applied, the specific hardware and software resources utilized, and the rigorous testing methodologies employed to ensure the reliability of the \textit{Run Bangladesh} application. The development process followed the Agile Scrum methodology, utilizing continuous integration and deployment (CI/CD) practices to streamline updates.
+%
+%\subsection{Algorithm Development}
+%Several key algorithms were implemented to handle specific business logic requirements efficiently.
+%
+%\begin{figure}[h!]
+%    \centering
+%    \includegraphics[width=0.9\textwidth]{algorithms.jpeg} 
+%    % Uncomment the line above and change the filename to your actual image file
+%    \caption{Subsystem Decomposition of Run Bangladesh Application}
+%    \label{fig:use_case}
+%\end{figure}
+%
+%\subsubsection{User Authentication and Session Management}
+%To secure user data and maintain stateless sessions, a \textbf{JWT (JSON Web Token)} based authentication algorithm was implemented.
+%\begin{enumerate}
+%    \item \textbf{Login Request:} User submits credentials (email/password).
+%    \item \textbf{Verification:} The server hashes the input password using \texttt{bcrypt} and compares it with the stored hash.
+%    \item \textbf{Token Generation:} If valid, the server signs a JWT containing the user's ID and Role (e.g., Runner, Admin) using a private secret key.
+%    \item \textbf{Response:} The token is returned to the client and stored in SecureStore (iOS) or SharedPreferences (Android).
+%    \item \textbf{Access Control:} Subsequent API requests include this token in the Authorization header. Middleware verifies the signature before granting access to protected routes.
+%\end{enumerate}
+%
+%\subsubsection{Geospatial Distance Calculation}
+%Although live tracking is out of scope, the system calculates the "Distance from Start Line" for venue navigation using the \textbf{Haversine Formula}. This helps users determine their proximity to the race venue.
+%\begin{equation}
+%    a = \sin^2\left(\frac{\Delta\phi}{2}\right) + \cos \phi_1 \cdot \cos \phi_2 \cdot \sin^2\left(\frac{\Delta\lambda}{2}\right)
+%\end{equation}
+%\begin{equation}
+%    c = 2 \cdot \text{atan2}\left(\sqrt{a}, \sqrt{1-a}\right)
+%\end{equation}
+%\begin{equation}
+%    d = R \cdot c
+%\end{equation}
+%Where $\phi$ is latitude, $\lambda$ is longitude, $R$ is Earth's radius ($6,371$ km), and $d$ is the distance.
+%
+%\subsection{Coding}
+%The source code for the application is structured into two main repositories: \texttt{run-bangladesh-client} (Frontend) and \texttt{run-bangladesh-server} (Backend). The code adheres to the \textbf{Airbnb JavaScript Style Guide} to ensure consistency.
+%
+%\textit{(Note: Due to the volume of the source code, the full codebase is attached in the Annex section of this report. Key snippets are referenced in the discussion below.)}
+%
+%\subsection{Hardware and Software Acquisition}
+%The development and deployment of the system required specific hardware and software resources.
+%
+%\subsubsection{Hardware Resources}
+%\begin{itemize}
+%    \item \textbf{Development Machines:} MacBook Air (M1) and Windows 10 Workstations (16GB RAM) for cross-platform simulation.
+%    \item \textbf{Test Devices:} 
+%    \begin{itemize}
+%        \item iPhone 11 (iOS 16) - For iOS testing.
+%        \item Samsung Galaxy A52 (Android 12) - For Android testing.
+%    \end{itemize}
+%\end{itemize}
+%
+%\subsubsection{Software Resources}
+%\begin{itemize}
+%    \item \textbf{IDE:} Visual Studio Code (v1.85) with ES7+ React/Redux snippets extensions.
+%    \item \textbf{Frameworks:} React Native (Expo SDK 49), Node.js (v18 LTS), Express.js (v4.18).
+%    \item \textbf{Database:} MongoDB Atlas (M0 Sandbox Cluster).
+%    \item \textbf{API Testing:} Postman (v10) for endpoint verification.
+%    \item \textbf{Version Control:} Git and GitHub for source code management.
+%    \item \textbf{Containerization:} Docker Desktop for creating consistent backend environments.
+%\end{itemize}
+%
+%\subsection{Installation}
+%The installation process is divided into server-side deployment and client-side installation.
+%
+%
+%\subsubsection{Server-Side Deployment (Render)}
+%
+%\begin{figure}[h!]
+%    \centering
+%    \includegraphics[width=0.9\textwidth]{docker.png} 
+%    % Uncomment the line above and change the filename to your actual image file
+%    \caption{Subsystem Decomposition of Run Bangladesh Application}
+%    \label{fig:use_case}
+%\end{figure}
+%\begin{enumerate}
+%    \item The backend repository is connected to \textbf{Render} via GitHub.
+%    \item Environment variables (DB\_URI, STRIPE\_SECRET, JWT\_SECRET) are configured in the Render dashboard.
+%    \item The build command \texttt{npm install} and start command \texttt{node server.js} are defined.
+%    \item Render automatically deploys the latest commit to the production URL.
+%\end{enumerate}
+%
+%\subsubsection{Client-Side Installation}
+%For end-users, the installation is handled via app distribution platforms.
+%\begin{itemize}
+%    \item \textbf{Development Build:} Users scan a QR code using the \textbf{Expo Go} app to load the JavaScript bundle dynamically.
+%    \item \textbf{Production Build:} An APK (Android) or IPA (iOS) file is generated using \texttt{eas build} and distributed via the Google Play Store or TestFlight.
+%\end{itemize}
+%
+%\subsection{Testing}
+%A multi-layered testing strategy was adopted to validate the system's functionality and performance.
+%
+%\subsubsection{Unit Testing}
+%Unit tests were written using \textbf{Jest} to verify individual functions and components in isolation.
+%\begin{itemize}
+%    \item \textbf{Scope:} Utility functions (e.g., date formatting, currency conversion) and API controller logic.
+%    \item \textbf{Coverage:} Achieved 85\% code coverage for critical backend logic.
+%\end{itemize}
+%
+%\subsubsection{Integration Testing}
+%Integration testing ensured that different modules interacted correctly.
+%\begin{itemize}
+%    \item \textbf{Database Integration:} Verified that user registration data was correctly written to and retrieved from the MongoDB cluster.
+%    \item \textbf{Payment Integration:} Tested the handshake between the app, the backend, and the Stripe sandbox environment to confirm successful payment intent creation and status updates.
+%\end{itemize}
+%
+%\subsubsection{System Testing}
+%End-to-end (E2E) testing was conducted to simulate real-world user scenarios.
+%\begin{itemize}
+%    \item \textbf{Scenario:} A user logs in, browses an event, registers, pays via a test card, and receives a QR code.
+%    \item \textbf{Result:} The flow was validated successfully across both Android and iOS devices.
+%\end{itemize}
+%
+%
+%\subsection{Maintenance}
+%Post-deployment maintenance ensures the system remains operational and secure.
+%\begin{itemize}
+%    \item \textbf{Monitoring:} \textbf{UptimeRobot} is used to monitor API availability, alerting the team if the server goes down.
+%    \item \textbf{Log Management:} Server logs are captured via \textbf{Morgan} (HTTP request logger) to debug runtime errors.
+%    \item \textbf{Updates:} Security patches for Node.js dependencies are applied regularly using \texttt{npm audit fix}.
+%    \item \textbf{Database Backups:} Automated daily backups are configured in MongoDB Atlas to prevent data loss.
+%\end{itemize}
+
+
+
+
+
+
+% ==========================================
+% SECTION 6: IMPLEMENTATION
+% ==========================================
+\section{Implementation}
+
+\subsection{Introduction}
+The implementation phase involves transforming the system design and architectural specifications into a functional software product \cite{pressman}. This section outlines the core algorithms developed, the coding standards applied, the specific hardware and software resources utilized, and the rigorous testing methodologies employed to ensure the reliability of the \textit{Run Bangladesh} application. The development process followed the Agile Scrum methodology \cite{scrum_guide}, utilizing continuous integration and deployment (CI/CD) practices to streamline updates.
+
+\subsection{Algorithm Development}
+Several key algorithms were implemented to handle specific business logic requirements efficiently.
+
+\begin{figure}[h!]
+    \centering
+     \includegraphics[width=0.9\textwidth]{algorithms.jpeg} 
+    % Uncomment the line above and change the filename to your actual image file
+    \caption{JWT Authenication Verification Flowchart}
+    \label{fig:subsystem_decomp}
+\end{figure}
+
+\subsubsection{User Authentication and Session Management}
+To secure user data and maintain stateless sessions, a \textbf{JWT (JSON Web Token)} based authentication algorithm was implemented \cite{jwt}.
+\begin{enumerate}
+    \item \textbf{Login Request:} User submits credentials (email/password).
+    \item \textbf{Verification:} The server hashes the input password using \texttt{bcrypt} and compares it with the stored hash to prevent plain-text exposure.
+    \item \textbf{Token Generation:} If valid, the server signs a JWT containing the user's ID and Role (e.g., Runner, Admin) using a private secret key.
+    \item \textbf{Response:} The token is returned to the client and stored securely (SecureStore on iOS, SharedPreferences on Android).
+    \item \textbf{Access Control:} Subsequent API requests include this token in the HTTP Authorization header. Middleware verifies the signature before granting access to protected routes.
+\end{enumerate}
+
+\subsubsection{Geospatial Distance Calculation}
+Although continuous live tracking is out of scope, the system calculates the "Distance from Start Line" to validate user presence at the venue using the \textbf{Haversine Formula} \cite{react_native_maps}. This ensures participants are physically present before they can "check in" to the race.
+\begin{equation}
+    a = \sin^2\left(\frac{\Delta\phi}{2}\right) + \cos \phi_1 \cdot \cos \phi_2 \cdot \sin^2\left(\frac{\Delta\lambda}{2}\right)
+\end{equation}
+\begin{equation}
+    c = 2 \cdot \text{atan2}\left(\sqrt{a}, \sqrt{1-a}\right)
+\end{equation}
+\begin{equation}
+    d = R \cdot c
+\end{equation}
+Where $\phi$ is latitude, $\lambda$ is longitude, $R$ is Earth's radius ($6,371$ km), and $d$ is the distance.
+
+%\subsection{Coding}
+%The source code for the application is structured into two main repositories: \\ \texttt{run-bangladesh-client} (Frontend) and \texttt{run-bangladesh-server} (Backend). The code adheres to the \textbf{Airbnb JavaScript Style Guide} to ensure consistency and maintainability \cite{martin_clean}.
+%
+%\textit{(Note: Due to the volume of the source code, the full codebase is attached in the Annex section of this report. Key snippets are referenced in the discussion below.)}
+
+
+%\subsection{Coding}
+%The source code for the application is structured into two main repositories: \texttt{run-bangladesh-client} (Frontend) and \texttt{run-bangladesh-server} (Backend). The code adheres to the \textbf{Airbnb JavaScript Style Guide} to ensure consistency and maintainability \cite{martin_clean}.
+%
+%\textit{(Note: Due to the volume of the source code, the full codebase is hosted on GitHub. Direct links to the repositories and setup instructions can be found in \textbf{Annex A}.)}
+%
+%\subsection{Hardware and Software Acquisition}
+%The development and deployment of the system required specific hardware and software resources.
+
+
+\subsection{Coding}
+The source code for the application is organized into a single monorepo containing both the server-side logic and the mobile client application. The project adheres to the \textbf{Airbnb JavaScript Style Guide} to ensure consistency and maintainability \cite{martin_clean}.
+
+\textit{(Note: Due to the volume of the source code, the full codebase is hosted on GitHub. Direct links to the repository and the detailed directory structure can be found in \textbf{Annex A}.)}
+
+\subsubsection{Hardware Resources}
+\begin{itemize}
+    \item \textbf{Development Machines:} MacBook Air (M1) and Windows 10 Workstations (16GB RAM) were used to ensure cross-platform compatibility.
+    \item \textbf{Test Devices:} 
+    \begin{itemize}
+        \item iPhone 11 (iOS 16) - For iOS native testing.
+        \item Samsung Galaxy A52 (Android 12) - For Android native testing.
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Software Resources}
+\begin{itemize}
+    \item \textbf{IDE:} Visual Studio Code (v1.85) with ES7+ React/Redux snippets extensions.
+    \item \textbf{Frameworks:} React Native (Expo SDK 49) \cite{react_native}, Node.js (v18 LTS), Express.js (v4.18).
+    \item \textbf{Database:} MongoDB Atlas (M0 Sandbox Cluster) for cloud data persistence.
+    \item \textbf{API Testing:} Postman (v10) for endpoint verification.
+    \item \textbf{Version Control:} Git and GitHub for source code management.
+    \item \textbf{Containerization:} Docker Desktop used to containerize the backend services for consistent deployment \cite{docker}.
+\end{itemize}
+
+\subsection{Installation}
+The installation process is divided into server-side deployment and client-side installation.
+
+\begin{figure}[h!]
+    \centering
+     \includegraphics[width=0.9\textwidth]{docker.jpeg} 
+     Uncomment the line above and change the filename to your actual image file
+    \caption{Containerization of Backend Services using Docker}
+    \label{fig:docker}
+\end{figure}
+
+\subsubsection{Server-Side Deployment (Render)}
+\begin{enumerate}
+    \item The backend repository is connected to \textbf{Render} cloud hosting via GitHub integration.
+    \item Environment variables (DB\_URI, STRIPE\_SECRET, JWT\_SECRET) are securely configured in the Render dashboard.
+    \item The build command \texttt{npm install} and start command \texttt{node server.js} are defined.
+    \item Render automatically deploys the latest commit to the production URL, ensuring the API is always up-to-date.
+\end{enumerate}
+
+\subsubsection{Client-Side Installation}
+For end-users, the installation is handled via app distribution platforms \cite{gao_mobile}.
+\begin{itemize}
+    \item \textbf{Development Build:} Testers scan a QR code using the \textbf{Expo Go} app to load the JavaScript bundle dynamically.
+    \item \textbf{Production Build:} An APK (Android) or IPA (iOS) file is generated using \texttt{eas build} and distributed via the Google Play Store or TestFlight.
+\end{itemize}
+
+\subsection{Testing}
+A multi-layered testing strategy was adopted to validate the system's functionality and performance \cite{sommerville}.
+
+\subsubsection{Unit Testing}
+Unit tests were written using \textbf{Jest} to verify individual functions and components in isolation \cite{jest}.
+\begin{itemize}
+    \item \textbf{Scope:} Utility functions (e.g., date formatting, currency conversion) and API controller logic.
+    \item \textbf{Coverage:} Achieved 85\% code coverage for critical backend logic.
+\end{itemize}
+
+\subsubsection{Integration Testing}
+Integration testing ensured that different modules interacted correctly.
+\begin{itemize}
+    \item \textbf{Database Integration:} Verified that user registration data was correctly written to and retrieved from the MongoDB cluster.
+    \item \textbf{Payment Integration:} Tested the handshake between the app, the backend, and the Stripe sandbox environment to confirm successful payment intent creation and status updates \cite{stripe_api}.
+\end{itemize}
+
+%\subsubsection{System Testing}
+%End-to-end (E2E) testing was conducted to simulate real-world user scenarios.
+%\begin{itemize}
+%    \item \textbf{Scenario:} A user logs in, browses an event, registers, pays via a test card, and receives a QR code.
+%    \item \textbf{Result:} The flow was validated successfully across both Android and iOS devices.
+%\end{itemize}
+%
+%
+%\begin{figure}[h!]
+%    \centering
+%     \includegraphics[width=0.9\textwidth]{test.jpg} 
+%    % Uncomment the line above and change the filename to your actual image file
+%    \caption{Unit Testing Pyramid: Manual \& Automated}
+%    \label{fig:subsystem}
+%\end{figure}
+%
+%\begin{figure}[h!]
+%    \centering
+%     \includegraphics[width=0.9\textwidth]{npm.jpeg} 
+%    % Uncomment the line above and change the filename to your actual image file
+%    \caption{Result: Automated Unit Testing}
+%    \label{fig:subsystem_test}
+%\end{figure}
+
+\subsection{Testing}
+A multi-layered testing strategy was adopted to validate the system's functionality and performance.
+
+\subsubsection{Unit Testing}
+Unit tests were implemented using \textbf{Jest} and \textbf{React Test Renderer} to verify individual components in isolation. A critical part of this process involved mocking external dependencies to ensure that UI logic could be tested without relying on native device modules or network requests.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.7\textwidth]{test.jpg} 
+    \caption{Testing Pyramid: emphasizing a strong base of Unit Tests}
+    \label{fig:test_pyramid}
+\end{figure}
+
+\textbf{Test Case: Root Layout Initialization} \\
+The code snippet below demonstrates the test suite for the application's root layout (\texttt{RootLayout}). This test ensures that:
+\begin{enumerate}
+    \item Essential providers (Stripe, Safe Area) are correctly wrapped around the application.
+    \item The authentication check (\texttt{checkAuth}) is triggered immediately upon mounting.
+    \item External modules like \texttt{expo-router} are successfully mocked to prevent runtime errors during the test phase.
+\end{enumerate}
+
+
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.9\textwidth]{npm.jpeg} 
+    \caption{Execution Result: Successful Pass of Automated Unit Tests}
+    \label{fig:test_result}
+\end{figure}
+
+\subsubsection{System Testing}
+End-to-end (E2E) testing was conducted to simulate real-world user scenarios, ensuring the entire flow functions as expected on actual hardware.
+%\begin{itemize}
+%    \item \textbf{Scenario-1:} A user signs up, and logs in, browses for a marathon, registers, and pays via a test card.
+%    \item \textbf{Scenario:} An admin logs in, create a marathon event, show event, and added volunteers of the event.
+%    \item \textbf{Result:} The flow was validated successfully across both Android (Samsung Galaxy A52) and iOS (iPhone 16 Pro) devices.
+%\end{itemize}
+
+\begin{itemize}
+    \item \textbf{Scenario 1 (Participant Flow):} A new user completes the sign-up process, logs in, browses the event feed, selects a marathon, and successfully completes registration by processing a payment via a test card.
+    \item \textbf{Scenario 2 (Admin Flow):} An administrator logs in, creates and publishes a new marathon event, verifies its visibility in the feed, and assigns volunteers to specific event tasks.
+    \item \textbf{Result:} Both workflows were validated successfully across Android (Samsung Galaxy A52) and iOS (iPhone 16 Pro) devices, confirming cross-platform compatibility and functional stability.
+\end{itemize}
+
+\subsection{Maintenance}
+Post-deployment maintenance ensures the system remains operational and secure.
+\begin{itemize}
+    \item \textbf{Monitoring:} \textbf{UptimeRobot} is used to monitor API availability, alerting the team if the server goes down.
+    \item \textbf{Log Management:} Server logs are captured via \textbf{Morgan} (HTTP request logger) to debug runtime errors.
+    \item \textbf{Updates:} Security patches for Node.js dependencies are applied regularly using \texttt{npm audit fix}.
+    \item \textbf{Database Backups:} Automated daily backups are configured in MongoDB Atlas to prevent data loss.
+\end{itemize}
+
+
+\end{thebibliography}
+% ==========================================
+% SECTION 7: CONCLUSIONS AND RECOMMENDATIONS
+% ==========================================
+\section{Conclusions and Recommendations}
+
+\subsection{Conclusions}
+The development of the \textit{Run Bangladesh} application marks a pivotal step towards the digital transformation of athletic event management in Bangladesh. Throughout this project, the team successfully engineered a full-stack mobile solution that addresses the systemic inefficiencies of legacy, manual workflows.
+
+By leveraging the \textbf{MERN stack (MongoDB, Express, React Native, Node.js)}, the project achieved the following key outcomes:
+\begin{itemize}
+    \item \textbf{Centralized Data Management:} The system successfully eliminated data fragmentation by creating a unified cloud-based repository for user profiles, event details, and financial records.
+    \item \textbf{Secure Financial Operations:} The integration of the \textbf{Stripe API} has automated payment reconciliation, reducing the administrative burden on organizers by ensuring instant, PCI-compliant transaction verification.
+    \item \textbf{Enhanced User Experience:} The implementation of \textbf{Expo Maps} and a mobile-first UI design has empowered participants with clear, accessible information regarding race logistics, significantly lowering the barrier to entry for new runners.
+    \item \textbf{Architectural Robustness:} Adherence to \textbf{SOLID principles} and the \textbf{Singleton Design Pattern} has resulted in a codebase that is not only functional but also modular and maintainable, capable of supporting future scaling requirements.
+\end{itemize}
+
+In conclusion, \textit{Run Bangladesh} meets all primary functional objectives outlined in the planning phase. It stands as a viable, scalable product ready to modernize how marathons are organized and experienced in the region.
+
+\subsection{Recommendations}
+To ensure the long-term success, stability, and scalability of the \textit{Run Bangladesh} platform, the following recommendations are proposed for the post-implementation phase:
+
+\subsubsection{Infrastructure and Deployment}
+\begin{itemize}
+    \item \textbf{Migration to Dedicated Hosting:} While the current deployment on Render's free tier is sufficient for testing, it is recommended to migrate to a dedicated cloud environment (e.g., \textbf{AWS EC2} or \textbf{DigitalOcean Droplets}) before full public release. This will prevent "cold start" latencies and ensure 99.9\% uptime during high-traffic registration windows.
+    \item \textbf{CDN Integration:} To further optimize image loading speeds for event galleries, the implementation of a dedicated Content Delivery Network (CDN) edge caching strategy is advised.
+\end{itemize}
+
+\subsubsection{Security and Compliance}
+\begin{itemize}
+    \item \textbf{Two-Factor Authentication (2FA):} For Organizer accounts, which have access to sensitive user data and financial controls, implementing 2FA is strongly recommended to prevent unauthorized access.
+    \item \textbf{Data Privacy Compliance:} As the user base grows, the system must strictly adhere to local data protection laws (and GDPR principles where applicable). It is recommended to implement a robust "Data Export" and "Account Deletion" feature to give users full control over their personal information.
+\end{itemize}
+
+\subsubsection{Operational Strategy}
+\begin{itemize}
+    \item \textbf{Beta Testing Program:} Before a nationwide launch, a closed beta test with a single local running community (e.g., 50-100 users) should be conducted to identify edge-case bugs and gather qualitative feedback on UX.
+    \item \textbf{Partnership with Payment Aggregators:} While Stripe is excellent, integrating local payment gateways (e.g., bKash, SSLCommerz) in future iterations would significantly increase accessibility for users who do not possess international credit cards.
+\end{itemize}
+%
+%% ==========================================
+%% REFERENCES SECTION
+%% ==========================================
+%\newpage
+%\renewcommand\refname{References} 
+%
+%\begin{thebibliography}{99}
+%
+%\bibitem{srs_doc}
+%S. Mohammed, ``Software Requirements Specification for Run Bangladesh,'' Team 01, CSE327, Department of Electrical and Computer Engineering, Nov. 2025.
+%
+%\bibitem{sommerville}
+%I. Sommerville, \textit{Software Engineering}, 10th ed. Boston, MA: Pearson, 2016.
+%
+%\bibitem{pressman}
+%R. S. Pressman and B. R. Maxim, \textit{Software Engineering: A Practitioner's Approach}, 8th ed. New York, NY: McGraw-Hill Education, 2015.
+%
+%\bibitem{gao_mobile}
+%J. Gao, P. Kulkarni, and H. Ranavat, ``A Mobile-Cloud Collaborative Approach for Context-Aware Applications,'' \textit{IEEE Transactions on Cloud Computing}, vol. 6, no. 3, pp. 823-835, 2018.
+%
+%\bibitem{martin_clean}
+%R. C. Martin, \textit{Clean Architecture: A Craftsman's Guide to Software Structure and Design}. Prentice Hall, 2017.
+%
+%\bibitem{gof_patterns}
+%E. Gamma, R. Helm, R. Johnson, and J. Vlissides, \textit{Design Patterns: Elements of Reusable Object-Oriented Software}. Addison-Wesley, 1994.
+%
+%\bibitem{react_native}
+%Meta Open Source, ``React Native Documentation,'' [Online]. Available: https://reactnative.dev/. [Accessed: Dec. 15, 2025].
+%
+%\bibitem{react_native_maps}
+%Airbnb (Community Maintained), ``React Native Maps Documentation,'' [Online]. Available: https://github.com/react-native-maps/react-native-maps. [Accessed: Dec. 15, 2025].
+%
+%\bibitem{jwt}
+%Auth0, ``Introduction to JSON Web Tokens,'' [Online]. Available: https://jwt.io/introduction. [Accessed: Dec. 15, 2025].
+%
+%\bibitem{stripe_api}
+%Stripe, ``Stripe API Reference: Payment Intents,'' [Online]. Available: https://stripe.com/docs/api. [Accessed: Dec. 15, 2025].
+%
+%\bibitem{cloudinary}
+%Cloudinary, ``Image and Video Management for Developers,'' [Online]. Available: https://cloudinary.com/documentation. [Accessed: Dec. 15, 2025].
+%
+%\bibitem{scrum_guide}
+%K. Schwaber and J. Sutherland, ``The Scrum Guide: The Definitive Guide to Scrum,'' Scrum.org, 2020. [Online]. Available: https://scrumguides.org.
+%
+%\bibitem{figma}
+%Figma, ``Figma: The Collaborative Interface Design Tool,'' [Online]. Available: https://www.figma.com/. [Accessed: Dec. 15, 2025].
+%
+%\bibitem{jest}
+%Meta Open Source, ``Jest: JavaScript Testing Framework,'' [Online]. Available: https://jestjs.io/. [Accessed: Dec. 15, 2025].
+%
+%\bibitem{docker}
+%Docker Inc., ``Docker Overview and Containerization,'' [Online]. Available: https://docs.docker.com/get-started/overview/. [Accessed: Dec. 15, 2025].
+%
+%\end{thebibliography}
+
+
+
+% ==========================================
+% REFERENCES SECTION
+% ==========================================
+\newpage
+\renewcommand\refname{References} 
+
+\begin{thebibliography}{99}
+
+\bibitem{srs_doc}
+S. Mohammed, ``Software Requirements Specification for Run Bangladesh,'' Team 01, CSE327, Department of Electrical and Computer Engineering, Nov. 2025.
+
+\bibitem{sommerville}
+I. Sommerville, \textit{Software Engineering}, 10th ed. Boston, MA: Pearson, 2016.
+
+\bibitem{pressman}
+R. S. Pressman and B. R. Maxim, \textit{Software Engineering: A Practitioner's Approach}, 8th ed. New York, NY: McGraw-Hill Education, 2015.
+
+\bibitem{gao_mobile}
+J. Gao, P. Kulkarni, and H. Ranavat, ``A Mobile-Cloud Collaborative Approach for Context-Aware Applications,'' \textit{IEEE Transactions on Cloud Computing}, vol. 6, no. 3, pp. 823-835, 2018.
+
+\bibitem{martin_clean}
+R. C. Martin, \textit{Clean Architecture: A Craftsman's Guide to Software Structure and Design}. Prentice Hall, 2017.
+
+\bibitem{gof_patterns}
+E. Gamma, R. Helm, R. Johnson, and J. Vlissides, \textit{Design Patterns: Elements of Reusable Object-Oriented Software}. Addison-Wesley, 1994.
+
+\bibitem{react_native}
+Meta Open Source, ``React Native Documentation,'' [Online]. Available: https://reactnative.dev/. [Accessed: Dec. 15, 2025].
+
+\bibitem{react_native_maps}
+Airbnb (Community Maintained), ``React Native Maps Documentation,'' [Online]. Available: https://github.com/react-native-maps/react-native-maps. [Accessed: Dec. 15, 2025].
+
+\bibitem{jwt}
+Auth0, ``Introduction to JSON Web Tokens,'' [Online]. Available: https://jwt.io/introduction. [Accessed: Dec. 15, 2025].
+
+\bibitem{stripe_api}
+Stripe, ``Stripe API Reference: Payment Intents,'' [Online]. Available: https://stripe.com/docs/api. [Accessed: Dec. 15, 2025].
+
+\bibitem{cloudinary}
+Cloudinary, ``Image and Video Management for Developers,'' [Online]. Available: https://cloudinary.com/documentation. [Accessed: Dec. 15, 2025].
+
+\bibitem{scrum_guide}
+K. Schwaber and J. Sutherland, ``The Scrum Guide: The Definitive Guide to Scrum,'' Scrum.org, 2020. [Online]. Available: https://scrumguides.org.
+
+\bibitem{figma}
+Figma, ``Figma: The Collaborative Interface Design Tool,'' [Online]. Available: https://www.figma.com/. [Accessed: Dec. 15, 2025].
+
+\bibitem{jest}
+Meta Open Source, ``Jest: JavaScript Testing Framework,'' [Online]. Available: https://jestjs.io/. [Accessed: Dec. 15, 2025].
+
+\bibitem{docker}
+Docker Inc., ``Docker Overview and Containerization,'' [Online]. Available: https://docs.docker.com/get-started/overview/. [Accessed: Dec. 15, 2025].
+
+
+%\end{thebibliography}
+
+
+
+\newpage
+\section*{Annex A: Source Code Repository}
+\addcontentsline{toc}{section}{Annex A: Source Code Repository}
+
+The complete source code for the \textit{Run Bangladesh} project is hosted on GitHub. Access to the repositories is public and includes detailed \texttt{README.md} files for installation and deployment.
+
+\subsection*{A.1 Repository Links}
+
+\begin{itemize}
+
+\item \textbf{Project Repository (Full Source):} \\
+    \url{https://github.com/nipunsaif/Run-Bangladesh}
+    
+    \item \textbf{Frontend (Mobile Client):} \\
+    \url{https://github.com/nipunsaif/Run-Bangladesh/tree/main/mobile/run-bangladesh}
+    
+    \item \textbf{Backend (Server API):} \\
+    \url{https://github.com/nipunsaif/Run-Bangladesh/tree/main/backend}
+\end{itemize}
+
+\subsection*{A.2 Directory Structure}
+The project follows a modular structure, separating the backend services from the mobile client. Below is the architectural layout of the codebase:
+
+\begin{small}
+\begin{verbatim}
+Run-Bangladesh/
+├── backend/                  # Server-Side Logic
+│   ├── src/                  # Source Code
+│   │   ├── lib/              # Helper functions & Utilities
+│   │   ├── middleware/       # Custom middleware (auth, error handling)
+│   │   ├── models/           # Mongoose Database Models
+│   │   ├── routes/           # API Route Definitions
+│   │   └── index.js          # Entry point for the server
+│   ├── .env                  # Environment Variables
+│   └── package.json          # Backend Dependencies
+│
+├── mobile/                   # Client-Side Application
+│   └── run-bangladesh/
+│       ├── app/              # Expo Router (Screens & Routes)
+│       │   ├── (auth)/       # Authentication Group
+│       │   ├── (tabs)/       # Main Tab Navigation
+│       │   ├── _layout.jsx   # Root Layout Config
+│       │   └── register.jsx  # Registration Screen
+│       │
+│       ├── assets/           # Static Assets
+│       │   ├── fonts/
+│       │   ├── images/
+│       │   └── styles/
+│       │
+│       ├── components/       # Reusable UI Components
+│       ├── constants/        # App Constants (Colors, URLs)
+│       ├── lib/              # Helper Libraries
+│       ├── store/            # State Management (Redux/Zustand)
+│       ├── app.json          # Expo Configuration
+│       ├── eas.json          # EAS Build Configuration
+│       └── package.json      # Mobile Dependencies
+│
+├── .gitignore
+└── README.md
+\end{verbatim}
+\end{small}
+
+%\end{document}
+
+
+
